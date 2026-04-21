@@ -362,6 +362,10 @@
 <script type="text/babel">
 const { useState, useEffect, useCallback } = React;
 
+function asset(name) {
+  return `assets/${name}`;
+}
+
 const GIRLS = [
   {
     id: 1, name: 'Pauline Plum', nickname: 'Lina', age: 21,
@@ -481,9 +485,9 @@ function HomePage({ setPage }) {
           <button className="btn btn-green" onClick={() => setPage('girls')}>Meet the Girls ✦</button>
         </div>
         <div className="hero-boxes">
-          <img src="box.png" className="hero-box-img" style={{transform:'rotate(-4deg)'}} onClick={() => setPage('shop')} alt="Fruitopia Girls Blindbox"/>
-          <img src="box.png" className="hero-box-img" style={{width:190,transform:'rotate(2deg) translateY(-12px)'}} onClick={() => setPage('shop')} alt="Fruitopia Girls Blindbox"/>
-          <img src="box.png" className="hero-box-img" style={{transform:'rotate(-1deg)'}} onClick={() => setPage('shop')} alt="Fruitopia Girls Blindbox"/>
+          <img src={asset('box.png')} className="hero-box-img" style={{transform:'rotate(-4deg)'}} onClick={() => setPage('shop')} alt="Fruitopia Girls Blindbox"/>
+          <img src={asset('box.png')} className="hero-box-img" style={{width:190,transform:'rotate(2deg) translateY(-12px)'}} onClick={() => setPage('shop')} alt="Fruitopia Girls Blindbox"/>
+          <img src={asset('box.png')} className="hero-box-img" style={{transform:'rotate(-1deg)'}} onClick={() => setPage('shop')} alt="Fruitopia Girls Blindbox"/>
         </div>
       </div>
       <Marquee/>
@@ -530,7 +534,7 @@ function ShopPage({ addToCart, setPage }) {
           {/* Main blindbox product */}
           <div className="product-card">
             <div className="product-img-wrap">
-              <img src="box.png" className="product-img" alt="Fruitopia Girls Blindbox"/>
+              <img src={asset('box.png')} className="product-img" alt="Fruitopia Girls Blindbox"/>
             </div>
             <div className="product-info">
               <div className="product-name">Fruitopia Girls Blindbox</div>

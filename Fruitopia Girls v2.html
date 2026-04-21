@@ -400,6 +400,10 @@
 <script type="text/babel">
 const { useState, useEffect, useCallback } = React;
 
+function asset(name) {
+  return `assets/${name}`;
+}
+
 const GIRLS = [
   {
     id: 1, name: 'Pauline Plum', nickname: 'Lina', age: 21,
@@ -407,7 +411,7 @@ const GIRLS = [
     likes: 'Bugs 🐛', dislikes: 'Clowns', school: 'FAU',
     major: 'Entomology', year: 'Sophomore',
     personality: 'Ambivert — giggly, sometimes talks too much',
-    color: '#9b59b6', light: '#f3e5fc', image: 'plum.png',
+    color: '#9b59b6', light: '#f3e5fc', image: asset('plum.png'),
     desc: 'Born and raised in Melbourne, FL. Will probably befriend every bug she finds.',
   },
   {
@@ -416,7 +420,7 @@ const GIRLS = [
     likes: 'Sports ⚽', dislikes: 'Painting', school: 'FAU',
     major: 'Health Science', year: 'Sophomore',
     personality: 'Extrovert — sweet but can get bossy & sour',
-    color: '#3f7539', light: '#e8f5e4', image: 'kiwi.png',
+    color: '#3f7539', light: '#e8f5e4', image: asset('kiwi.png'),
     desc: 'Jacksonville bred, always ready for the game. Don\'t get on her bad side.',
   },
   {
@@ -425,7 +429,7 @@ const GIRLS = [
     likes: 'Beach 🏖️', dislikes: 'Tomatoes', school: 'FAU',
     major: 'Marine Biology', year: 'Junior',
     personality: 'Sassy, sarcastic, but deeply caring',
-    color: '#e0527a', light: '#fce4ec', image: 'dragonfruit.png',
+    color: '#e0527a', light: '#fce4ec', image: asset('dragonfruit.png'),
     desc: 'Moved from Jamaica to FL at 13. Knows the ocean better than anyone.',
   },
 ];
@@ -438,15 +442,15 @@ function Box3D({ spinning }) {
     <div className="box-scene">
       <div className={`box-cube ${spinning ? 'spinning' : ''}`}>
         <div className="box-f box-f-front">
-          <img src="box-promo-hq.png" alt="Fruitopia Girls Box"/>
+          <img src={asset('box-promo-hq.png')} alt="Fruitopia Girls Box"/>
         </div>
         <div className="box-f box-f-back"/>
         <div className="box-f box-f-right" style={{background:'linear-gradient(160deg,#f9adc4,#e0527a)'}}>
-          <img src="box-promo-hq.png" alt="" style={{opacity:0.35,filter:'brightness(1.1)'}}/>
+          <img src={asset('box-promo-hq.png')} alt="" style={{opacity:0.35,filter:'brightness(1.1)'}}/>
         </div>
         <div className="box-f box-f-left"/>
         <div className="box-f box-f-top" style={{background:'linear-gradient(135deg,#fce4ec,#f9c0d0)'}}>
-          <img src="box-promo.png" alt="" style={{objectPosition:'top',opacity:0.5}}/>
+          <img src={asset('box-promo.png')} alt="" style={{objectPosition:'top',opacity:0.5}}/>
         </div>
         <div className="box-f box-f-bottom"/>
       </div>
