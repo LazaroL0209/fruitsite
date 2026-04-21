@@ -1,6 +1,0 @@
-/* Entry point for the page stylesheet. Each import groups related styles together. */
-@import url("./partials/base.css");
-@import url("./partials/layout.css");
-@import url("./partials/components.css");
-@import url("./partials/sections.css");
-@import url("./partials/responsive.css");
