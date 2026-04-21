@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Fruitopia Girls ✦</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<style>
+  :root {
+    --pink: #f3839f;
+    --light-pink: #fad4e3;
+    --hot-pink: #e0527a;
+    --green: #3f7539;
+    --light-green: #f1f7df;
+    --cream: #f5fae3;
+    --purple: #9b59b6;
+    --teal: #2aaba8;
+    --white: #fffaf8;
+    --shadow: 0 4px 20px rgba(243,131,159,0.3);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--light-pink);
+    color: #3a1a2e;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  /* scrollbar */
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: var(--light-pink); }
+  ::-webkit-scrollbar-thumb { background: var(--pink); border-radius: 99px; }
+
+  /* NAV */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(255,255,255,0.75);
+    backdrop-filter: blur(16px);
+    border-bottom: 2px solid var(--light-pink);
+    padding: 0 2rem;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 68px;
+    box-shadow: 0 2px 20px rgba(243,131,159,0.15);
+  }
+  .nav-logo {
+    font-family: 'Pacifico', cursive;
+    font-size: 1.6rem;
+    color: var(--hot-pink);
+    text-shadow: 2px 2px 0 var(--light-pink);
+    cursor: pointer;
+    letter-spacing: 0.5px;
+  }
+  .nav-links { display: flex; gap: 1.5rem; align-items: center; }
+  .nav-link {
+    font-weight: 700; font-size: 0.9rem; letter-spacing: 0.5px;
+    color: #3a1a2e; cursor: pointer; padding: 6px 14px;
+    border-radius: 99px; transition: all 0.2s;
+    text-transform: uppercase;
+  }
+  .nav-link:hover, .nav-link.active { background: var(--light-pink); color: var(--hot-pink); }
+  .cart-btn {
+    position: relative; background: var(--pink);
+    border: none; border-radius: 99px;
+    padding: 8px 18px; cursor: pointer;
+    font-family: 'Nunito', sans-serif; font-weight: 800;
+    color: white; font-size: 0.9rem;
+    display: flex; align-items: center; gap: 6px;
+    box-shadow: 0 3px 10px rgba(240,82,122,0.3);
+    transition: all 0.2s;
+  }
+  .cart-btn:hover { transform: scale(1.05); background: var(--hot-pink); }
+  .cart-badge {
+    background: var(--green); color: white;
+    border-radius: 99px; padding: 1px 7px; font-size: 0.75rem; font-weight: 900;
+  }
+
+  /* BUTTONS */
+  .btn {
+    font-family: 'Nunito', sans-serif; font-weight: 900;
+    border: none; border-radius: 99px; cursor: pointer;
+    padding: 14px 36px; font-size: 1rem;
+    text-transform: uppercase; letter-spacing: 1px;
+    transition: all 0.2s; position: relative; overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.12);
+  }
+  .btn::after {
+    content: ''; position: absolute; top: 0; left: -100%;
+    width: 60%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: left 0.4s;
+  }
+  .btn:hover::after { left: 150%; }
+  .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.18); }
+  .btn-pink { background: linear-gradient(135deg, var(--pink), var(--hot-pink)); color: white; }
+  .btn-green { background: linear-gradient(135deg, #5aad52, var(--green)); color: white; }
+  .btn-outline { background: white; color: var(--hot-pink); border: 2.5px solid var(--pink); }
+  .btn-sm { padding: 8px 20px; font-size: 0.85rem; }
+
+  /* MARQUEE */
+  .marquee-wrap { background: var(--hot-pink); padding: 10px 0; overflow: hidden; }
+  .marquee-track {
+    display: flex; gap: 0; white-space: nowrap;
+    animation: marqueeScroll 18s linear infinite;
+  }
+  .marquee-item {
+    color: white; font-weight: 800; font-size: 0.9rem;
+    padding: 0 2rem; letter-spacing: 1px; text-transform: uppercase;
+  }
+  @keyframes marqueeScroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+  /* SPARKLES */
+  .sparkle { position: absolute; pointer-events: none; }
+  .sparkle::before {
+    content: '✦'; font-size: var(--sz, 1.2rem);
+    color: var(--sc, #f3839f); opacity: 0.6;
+    animation: twinkle var(--dur, 2s) ease-in-out infinite;
+    animation-delay: var(--delay, 0s);
+  }
+  @keyframes twinkle { 0%,100%{opacity:0.2;transform:scale(0.8)} 50%{opacity:0.9;transform:scale(1.2)} }
+
+  /* HERO */
+  .hero {
+    position: relative; overflow: hidden;
+    min-height: calc(100vh - 68px);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 4rem 2rem;
+    background: linear-gradient(160deg, #fff0f5 0%, #fad4e3 40%, #f3839f 100%);
+  }
+  .hero-bg {
+    position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.18) 0%, transparent 60%);
+    opacity: 0.6;
+  }
+  .hero-swirl {
+    position: absolute; border-radius: 50%;
+    background: rgba(255,255,255,0.25); pointer-events: none;
+    animation: swirlFloat 8s ease-in-out infinite;
+  }
+  @keyframes swirlFloat { 0%,100%{transform:translate(0,0) rotate(0deg)} 33%{transform:translate(20px,-30px) rotate(120deg)} 66%{transform:translate(-15px,20px) rotate(240deg)} }
+  .hero-title {
+    font-family: 'Pacifico', cursive;
+    font-size: clamp(3rem, 8vw, 6rem);
+    color: white;
+    text-shadow: 3px 3px 0 var(--hot-pink), 6px 6px 0 rgba(0,0,0,0.1);
+    line-height: 1.1; position: relative; z-index: 2;
+    animation: popIn 0.8s cubic-bezier(0.34,1.56,0.64,1) both;
+  }
+  @keyframes popIn { from{opacity:0;transform:scale(0.5)} to{opacity:1;transform:scale(1)} }
+  .hero-sub {
+    font-size: 1.25rem; font-weight: 700; color: white;
+    margin: 1rem 0 2.5rem; text-shadow: 1px 1px 4px rgba(0,0,0,0.15);
+    position: relative; z-index: 2; letter-spacing: 1px;
+    animation: fadeUp 0.8s 0.3s both;
+  }
+  .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; position: relative; z-index: 2; animation: fadeUp 0.8s 0.5s both; }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+
+  .hero-boxes {
+    display: flex; gap: 2rem; margin-top: 4rem;
+    align-items: flex-end; justify-content: center;
+    position: relative; z-index: 2;
+    animation: fadeUp 0.8s 0.7s both;
+    flex-wrap: wrap;
+  }
+  .hero-box-img {
+    width: 160px; border-radius: 18px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+    transition: transform 0.3s;
+    cursor: pointer;
+  }
+  .hero-box-img:hover { transform: translateY(-8px) rotate(-2deg); }
+
+  /* SECTION */
+  .section { padding: 5rem 2rem; max-width: 1100px; margin: 0 auto; }
+  .section-title {
+    font-family: 'Pacifico', cursive; font-size: 2.2rem;
+    color: var(--hot-pink); text-align: center; margin-bottom: 0.5rem;
+    text-shadow: 2px 2px 0 var(--light-pink);
+  }
+  .section-sub { text-align: center; color: #888; font-weight: 600; margin-bottom: 3rem; }
+
+  /* SHOP PAGE */
+  .shop-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 2rem; }
+  .product-card {
+    background: white; border-radius: 24px;
+    box-shadow: var(--shadow);
+    overflow: hidden; transition: transform 0.25s, box-shadow 0.25s;
+    border: 2px solid var(--light-pink);
+  }
+  .product-card:hover { transform: translateY(-6px); box-shadow: 0 12px 40px rgba(243,131,159,0.35); }
+  .product-img-wrap {
+    background: linear-gradient(135deg, var(--light-pink), #fff0f5);
+    padding: 2rem; display: flex; align-items: center; justify-content: center;
+    position: relative; height: 260px; overflow: hidden;
+  }
+  .product-img { max-width: 100%; max-height: 220px; object-fit: contain; filter: drop-shadow(0 8px 20px rgba(0,0,0,0.15)); }
+  .product-info { padding: 1.5rem; }
+  .product-name { font-family: 'Pacifico', cursive; font-size: 1.3rem; color: var(--hot-pink); margin-bottom: 0.4rem; }
+  .product-desc { font-size: 0.88rem; color: #888; font-weight: 600; margin-bottom: 1rem; line-height: 1.5; }
+  .product-price { font-size: 1.6rem; font-weight: 900; color: var(--green); margin-bottom: 1rem; }
+  .product-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+  .qty-ctrl { display: flex; align-items: center; gap: 8px; }
+  .qty-btn {
+    width: 32px; height: 32px; border-radius: 50%; border: 2px solid var(--pink);
+    background: white; color: var(--pink); font-size: 1.2rem; font-weight: 900;
+    cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s;
+  }
+  .qty-btn:hover { background: var(--pink); color: white; }
+  .qty-num { font-weight: 800; font-size: 1rem; min-width: 24px; text-align: center; }
+
+  /* 3D BOX — W:140 H:320 D:52 */
+  .box-scene {
+    perspective: 900px;
+    width: 140px; height: 320px;
+    cursor: pointer;
+    filter: drop-shadow(0 18px 32px rgba(224,82,122,0.35));
+  }
+  .box-cube {
+    width: 140px; height: 320px;
+    position: relative;
+    transform-style: preserve-3d;
+    transform: rotateX(-14deg) rotateY(32deg);
+    animation: boxFloat3d 4s ease-in-out infinite;
+  }
+  .box-cube.spinning {
+    animation: spinBox3d 1.6s cubic-bezier(0.25,0.46,0.45,0.94) forwards;
+  }
+  @keyframes boxFloat3d {
+    0%,100% { transform: rotateX(-14deg) rotateY(32deg) translateY(0px); }
+    50%      { transform: rotateX(-14deg) rotateY(40deg) translateY(-12px); }
+  }
+  @keyframes spinBox3d {
+    0%   { transform: rotateX(-14deg) rotateY(32deg); }
+    35%  { transform: rotateX(-6deg) rotateY(320deg) scale(1.1); }
+    70%  { transform: rotateX(-18deg) rotateY(620deg) scale(1.08); }
+    100% { transform: rotateX(-14deg) rotateY(752deg); }
+  }
+  .box-f {
+    position: absolute;
+    backface-visibility: hidden;
+    overflow: hidden;
+  }
+  /* Front */
+  .box-f-front { width: 140px; height: 320px; }
+  /* Back */
+  .box-f-back  { width: 140px; height: 320px; transform: rotateY(180deg) translateZ(52px); background: linear-gradient(160deg,#f3839f,#e0527a); }
+  /* Right side */
+  .box-f-right { width: 52px; height: 320px; left: 140px; transform-origin: 0% 50%; transform: rotateY(90deg); }
+  /* Left side */
+  .box-f-left  { width: 52px; height: 320px; left: -52px; transform-origin: 100% 50%; transform: rotateY(-90deg); background: linear-gradient(160deg,#f7b8cc,#e86890); }
+  /* Top */
+  .box-f-top   { width: 140px; height: 52px; top: -52px; transform-origin: 50% 100%; transform: rotateX(-90deg); }
+  /* Bottom */
+  .box-f-bottom{ width: 140px; height: 52px; top: 320px; transform-origin: 50% 0%; transform: rotateX(90deg); background: linear-gradient(135deg,#f3839f,#e0527a); }
+  .box-f img   { width: 100%; height: 100%; object-fit: cover; }
+
+  @keyframes spinBox {
+    0%   { transform: rotateY(0deg) scale(1); }
+    30%  { transform: rotateY(270deg) scale(1.15); }
+    70%  { transform: rotateY(540deg) scale(1.1); }
+    100% { transform: rotateY(720deg) scale(1); }
+  }
+  @keyframes boxImgFloat {
+    0%,100% { transform: translateY(0px) rotate(-2deg); }
+    50%     { transform: translateY(-10px) rotate(2deg); }
+  }
+
+  /* REVEAL PAGE */
+  .reveal-stage {
+    display: flex; flex-direction: column; align-items: center;
+    justify-content: center; min-height: 80vh; gap: 2rem; padding: 3rem 2rem;
+  }
+
+  /* GIRL REVEAL CARD */
+  .girl-reveal {
+    animation: revealPop 0.7s cubic-bezier(0.34,1.56,0.64,1) both;
+    text-align: center; max-width: 380px;
+  }
+  @keyframes revealPop { from{opacity:0;transform:scale(0.4) translateY(40px)} to{opacity:1;transform:scale(1) translateY(0)} }
+  .girl-card {
+    border-radius: 28px; padding: 2.5rem 2rem;
+    position: relative; overflow: hidden;
+    box-shadow: 0 12px 50px rgba(0,0,0,0.15);
+    border: 3px solid rgba(255,255,255,0.6);
+  }
+  .girl-card::before {
+    content: ''; position: absolute; top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .girl-silhouette {
+    width: 120px; height: 160px; margin: 0 auto 1.5rem;
+    border-radius: 16px; position: relative;
+    display: flex; align-items: flex-end; justify-content: center;
+    font-size: 5rem; padding-bottom: 0.5rem;
+  }
+  .girl-name { font-family: 'Pacifico', cursive; font-size: 2rem; margin-bottom: 0.25rem; }
+  .girl-nick { font-size: 1rem; font-weight: 700; opacity: 0.7; margin-bottom: 1rem; }
+  .girl-traits { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 1.5rem; }
+  .trait-chip {
+    background: rgba(255,255,255,0.5); border-radius: 99px;
+    padding: 4px 14px; font-size: 0.8rem; font-weight: 700; backdrop-filter: blur(4px);
+  }
+  .rarity-badge {
+    display: inline-block; padding: 6px 20px; border-radius: 99px;
+    font-weight: 900; font-size: 0.85rem; letter-spacing: 1px; text-transform: uppercase;
+    background: rgba(255,255,255,0.35); backdrop-filter: blur(4px); margin-bottom: 1.5rem;
+    border: 2px solid rgba(255,255,255,0.5);
+  }
+  .confetti-piece {
+    position: fixed; width: 10px; height: 10px; border-radius: 2px;
+    animation: confettiFall linear forwards;
+    pointer-events: none; z-index: 999;
+  }
+  @keyframes confettiFall {
+    0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+  }
+
+  /* GIRLS PAGE */
+  .girls-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 2rem; }
+  .girl-profile {
+    border-radius: 28px; overflow: hidden;
+    box-shadow: var(--shadow); transition: transform 0.25s;
+    border: 3px solid rgba(255,255,255,0.7);
+  }
+  .girl-profile:hover { transform: translateY(-6px); }
+  .girl-profile-top { padding: 2.5rem 2rem 2rem; text-align: center; position: relative; }
+  .girl-profile-emoji { font-size: 4rem; margin-bottom: 0.75rem; display: block; }
+  .girl-profile-name { font-family: 'Pacifico', cursive; font-size: 1.6rem; }
+  .girl-profile-nick { font-weight: 700; font-size: 0.9rem; opacity: 0.7; margin-top: 2px; }
+  .girl-profile-body { background: rgba(255,255,255,0.55); backdrop-filter: blur(8px); padding: 1.5rem; }
+  .girl-stat { display: flex; justify-content: space-between; padding: 7px 0; border-bottom: 1.5px solid rgba(255,255,255,0.5); font-size: 0.88rem; }
+  .girl-stat:last-child { border-bottom: none; }
+  .girl-stat-label { font-weight: 800; opacity: 0.7; }
+  .girl-stat-val { font-weight: 700; text-align: right; }
+
+  /* CART PAGE */
+  .cart-layout { display: grid; grid-template-columns: 1fr 360px; gap: 2rem; align-items: start; }
+  @media(max-width:768px){.cart-layout{grid-template-columns:1fr;}}
+  .cart-table { background: white; border-radius: 24px; overflow: hidden; box-shadow: var(--shadow); border: 2px solid var(--light-pink); }
+  .cart-header { background: linear-gradient(135deg, var(--light-pink), #fff0f5); padding: 1.25rem 2rem; font-weight: 900; font-size: 1.1rem; letter-spacing: 0.5px; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 1rem; }
+  .cart-row { padding: 1rem 2rem; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 1rem; align-items: center; border-bottom: 1.5px solid var(--light-pink); }
+  .cart-row:last-child { border-bottom: none; }
+  .cart-item-name { font-weight: 800; font-size: 0.95rem; }
+  .cart-item-sub { font-size: 0.78rem; color: #aaa; font-weight: 600; }
+  .cart-remove { background: none; border: none; cursor: pointer; color: #ddd; font-size: 1.3rem; transition: color 0.2s; }
+  .cart-remove:hover { color: var(--hot-pink); }
+  .order-summary { background: white; border-radius: 24px; padding: 2rem; box-shadow: var(--shadow); border: 2px solid var(--light-pink); }
+  .order-title { font-family: 'Pacifico', cursive; font-size: 1.4rem; color: var(--hot-pink); margin-bottom: 1.5rem; }
+  .order-line { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--light-pink); font-weight: 700; font-size: 0.9rem; }
+  .order-total { display: flex; justify-content: space-between; padding-top: 1rem; font-weight: 900; font-size: 1.2rem; color: var(--hot-pink); }
+  .input-group { margin-bottom: 1rem; }
+  .input-label { font-weight: 800; font-size: 0.85rem; color: #888; margin-bottom: 4px; display: block; letter-spacing: 0.5px; text-transform: uppercase; }
+  .input-field {
+    width: 100%; padding: 11px 16px; border-radius: 12px;
+    border: 2px solid var(--light-pink); font-family: 'Nunito', sans-serif;
+    font-size: 0.95rem; font-weight: 600; outline: none; transition: border-color 0.2s;
+  }
+  .input-field:focus { border-color: var(--pink); }
+  .empty-cart { text-align: center; padding: 4rem 2rem; }
+  .empty-cart-emoji { font-size: 4rem; margin-bottom: 1rem; }
+
+  /* SUCCESS */
+  .success-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 70vh; text-align: center; gap: 1.5rem; }
+  .success-icon { font-size: 5rem; animation: bounce 1s infinite alternate; }
+  @keyframes bounce { from{transform:translateY(0)} to{transform:translateY(-12px)} }
+
+  /* FEATURED STRIP */
+  .featured-strip { display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap; }
+  .featured-chip {
+    background: rgba(255,255,255,0.65); backdrop-filter: blur(8px);
+    border: 2.5px solid var(--light-pink); border-radius: 99px;
+    padding: 12px 24px; font-weight: 800; font-size: 0.95rem;
+    cursor: pointer; transition: all 0.2s;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .featured-chip:hover { background: var(--pink); color: white; border-color: var(--pink); transform: scale(1.05); }
+
+  /* PAGE TRANSITION */
+  .page-enter { animation: pageIn 0.4s ease both; }
+  @keyframes pageIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+
+  /* FOOTER */
+  footer {
+    background: var(--hot-pink); color: white; text-align: center;
+    padding: 2rem; font-weight: 700;
+    font-family: 'Pacifico', cursive; letter-spacing: 0.5px; font-size: 1rem;
+  }
+  footer span { opacity: 0.7; font-family: 'Nunito', sans-serif; font-size: 0.85rem; display: block; margin-top: 4px; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useEffect, useCallback } = React;
+
+const GIRLS = [
+  {
+    id: 1, name: 'Pauline Plum', nickname: 'Lina', age: 21,
+    birthday: '11/22/04', zodiac: '♐ Sagittarius', heritage: 'Vietnamese',
+    likes: 'Bugs 🐛', dislikes: 'Clowns', school: 'FAU',
+    major: 'Entomology', year: 'Sophomore',
+    personality: 'Ambivert — giggly, sometimes talks too much',
+    color: '#9b59b6', light: '#f3e5fc', image: 'plum.png',
+    desc: 'Born and raised in Melbourne, FL. Will probably befriend every bug she finds.',
+  },
+  {
+    id: 2, name: 'Kiki Kiwi', nickname: 'KK', age: 21,
+    birthday: '11/08/04', zodiac: '♏ Scorpio', heritage: 'German',
+    likes: 'Sports ⚽', dislikes: 'Painting', school: 'FAU',
+    major: 'Health Science', year: 'Sophomore',
+    personality: 'Extrovert — sweet but can get bossy & sour',
+    color: '#3f7539', light: '#e8f5e4', image: 'kiwi.png',
+    desc: 'Jacksonville bred, always ready for the game. Don\'t get on her bad side.',
+  },
+  {
+    id: 3, name: 'Draya Dragon', nickname: 'Yaya', age: 23,
+    birthday: '06/17/02', zodiac: '♊ Gemini', heritage: 'Jamaican',
+    likes: 'Beach 🏖️', dislikes: 'Tomatoes', school: 'FAU',
+    major: 'Marine Biology', year: 'Junior',
+    personality: 'Sassy, sarcastic, but deeply caring',
+    color: '#e0527a', light: '#fce4ec', image: 'dragonfruit.png',
+    desc: 'Moved from Jamaica to FL at 13. Knows the ocean better than anyone.',
+  },
+];
+
+const PRODUCT_PRICE = 24.99;
+
+// 3D Box component
+function Box3D({ spinning }) {
+  return (
+    <div className="box-scene">
+      <div className={`box-cube ${spinning ? 'spinning' : ''}`}>
+        <div className="box-f box-f-front">
+          <img src="box-promo-hq.png" alt="Fruitopia Girls Box"/>
+        </div>
+        <div className="box-f box-f-back"/>
+        <div className="box-f box-f-right" style={{background:'linear-gradient(160deg,#f9adc4,#e0527a)'}}>
+          <img src="box-promo-hq.png" alt="" style={{opacity:0.35,filter:'brightness(1.1)'}}/>
+        </div>
+        <div className="box-f box-f-left"/>
+        <div className="box-f box-f-top" style={{background:'linear-gradient(135deg,#fce4ec,#f9c0d0)'}}>
+          <img src="box-promo.png" alt="" style={{objectPosition:'top',opacity:0.5}}/>
+        </div>
+        <div className="box-f box-f-bottom"/>
+      </div>
+    </div>
+  );
+}
+
+// Confetti component
+function Confetti({ active }) {
+  const [pieces, setPieces] = useState([]);
+  useEffect(() => {
+    if (!active) { setPieces([]); return; }
+    const colors = ['#f3839f','#fad4e3','#3f7539','#f1f7df','#9b59b6','#e0527a','#ffd700'];
+    const newPieces = Array.from({ length: 60 }, (_, i) => ({
+      id: i,
+      left: Math.random() * 100,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      duration: 1.5 + Math.random() * 2,
+      delay: Math.random() * 0.8,
+      size: 6 + Math.random() * 10,
+    }));
+    setPieces(newPieces);
+    const t = setTimeout(() => setPieces([]), 3500);
+    return () => clearTimeout(t);
+  }, [active]);
+  return <>
+    {pieces.map(p => (
+      <div key={p.id} className="confetti-piece" style={{
+        left: `${p.left}vw`, top: 0,
+        background: p.color,
+        width: p.size, height: p.size,
+        animationDuration: `${p.duration}s`,
+        animationDelay: `${p.delay}s`,
+        borderRadius: Math.random() > 0.5 ? '50%' : '2px',
+      }}/>
+    ))}
+  </>;
+}
+
+// NAV
+function Nav({ page, setPage, cartCount }) {
+  return (
+    <nav>
+      <div className="nav-logo" onClick={() => setPage('home')}>✦ Fruitopia Girls</div>
+      <div className="nav-links">
+        {['home','shop','girls'].map(p => (
+          <div key={p} className={`nav-link${page===p?' active':''}`} onClick={() => setPage(p)}>
+            {p === 'home' ? '🏠 Home' : p === 'shop' ? '🛍 Shop' : '💫 Girls'}
+          </div>
+        ))}
+        <button className="cart-btn" onClick={() => setPage('cart')}>
+          🛒 Cart {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
+        </button>
+      </div>
+    </nav>
+  );
+}
+
+// MARQUEE
+function Marquee() {
+  const items = ['✦ Fruitopia Girls','Pauline Plum','Kiki Kiwi','Draya Dragon','FAU','Blindbox Series 1','✦ Collect All 3','Who will you pull?'];
+  const doubled = [...items, ...items];
+  return (
+    <div className="marquee-wrap">
+      <div className="marquee-track">
+        {doubled.map((t, i) => <span key={i} className="marquee-item">{t}</span>)}
+      </div>
+    </div>
+  );
+}
+
+// HOME PAGE
+function HomePage({ setPage }) {
+  return (
+    <div className="page-enter">
+      <div className="hero">
+        <div className="hero-bg"/>
+        {/* Swirl orbs */}
+        <div className="hero-swirl" style={{width:400,height:400,top:-100,right:-100,animationDelay:'0s'}}/>
+        <div className="hero-swirl" style={{width:250,height:250,bottom:-50,left:-60,animationDelay:'3s'}}/>
+        {/* Sparkles */}
+        {[[80,15,'1.4rem','#fff','1.5s','0s'],[15,25,'1rem','#fad4e3','2s','0.5s'],[90,60,'0.9rem','#fff','2.5s','1s'],[5,70,'1.2rem','#fad4e3','1.8s','0.8s'],[50,85,'1.6rem','#fff','2s','0.3s']].map(([l,t,sz,sc,dur,del],i) => (
+          <div key={i} className="sparkle" style={{left:`${l}%`,top:`${t}%`,'--sz':sz,'--sc':sc,'--dur':dur,'--delay':del}}/>
+        ))}
+        <div style={{fontSize:'1rem',fontWeight:800,color:'rgba(255,255,255,0.8)',letterSpacing:'3px',textTransform:'uppercase',marginBottom:'0.75rem',position:'relative',zIndex:2}}>
+          ✦ Series 1 — Now Available ✦
+        </div>
+        <h1 className="hero-title">Fruitopia Girls</h1>
+        <p className="hero-sub">Collect all 3 — Who will you pull? ✨</p>
+        <div className="hero-btns">
+          <button className="btn btn-outline" onClick={() => setPage('shop')} style={{background:'rgba(255,255,255,0.9)'}}>🛍 Shop Now</button>
+          <button className="btn btn-green" onClick={() => setPage('girls')}>Meet the Girls ✦</button>
+        </div>
+        <div className="hero-boxes">
+          <div style={{transform:'rotate(-4deg) scale(0.7)',transformOrigin:'bottom center',cursor:'pointer'}} onClick={() => setPage('shop')}><Box3D/></div>
+          <div style={{transform:'rotate(1deg) scale(0.85) translateY(-18px)',transformOrigin:'bottom center',cursor:'pointer'}} onClick={() => setPage('shop')}><Box3D/></div>
+          <div style={{transform:'rotate(-1deg) scale(0.7)',transformOrigin:'bottom center',cursor:'pointer'}} onClick={() => setPage('shop')}><Box3D/></div>
+        </div>
+      </div>
+      <Marquee/>
+      {/* Featured section */}
+      <div className="section">
+        <h2 className="section-title">Collect Your Crew 💕</h2>
+        <p className="section-sub">3 unique Fruitopia Girls — each blindbox is a surprise!</p>
+        <div className="featured-strip">
+          {GIRLS.map(g => (
+            <div key={g.id} className="featured-chip" style={{'--lp':g.light}} onClick={() => setPage('girls')}>
+              <img src={g.image} alt={g.name} style={{width:28,height:28,objectFit:'contain'}}/>
+              <span>{g.name}</span>
+            </div>
+          ))}
+        </div>
+        <div style={{textAlign:'center',marginTop:'3rem'}}>
+          <button className="btn btn-pink" onClick={() => setPage('shop')} style={{fontSize:'1.1rem',padding:'16px 48px'}}>
+            🎁 Grab a Blindbox
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// SHOP PAGE
+function ShopPage({ addToCart, setPage }) {
+  const [qty, setQty] = useState(1);
+  const [added, setAdded] = useState(false);
+
+  function handleAdd() {
+    for (let i = 0; i < qty; i++) addToCart({ id: 'box', name: 'Fruitopia Girls Blindbox', price: PRODUCT_PRICE });
+    setAdded(true);
+    setTimeout(() => setAdded(false), 2000);
+  }
+
+  return (
+    <div className="page-enter">
+      <div className="section">
+        <h2 className="section-title">Shop ✦</h2>
+        <p className="section-sub">Each box hides one of 3 girls — collect them all!</p>
+        <div className="shop-grid">
+          {/* Main blindbox product */}
+          <div className="product-card">
+            <div className="product-img-wrap" style={{height:360}}>
+              <Box3D/>
+            </div>
+            <div className="product-info">
+              <div className="product-name">Fruitopia Girls Blindbox</div>
+              <div className="product-desc">Series 1 — Contains 1 mystery figure. Pull Pauline Plum, Kiki Kiwi, or Draya Dragon!</div>
+              <div className="product-price">${PRODUCT_PRICE.toFixed(2)}</div>
+              <div className="qty-ctrl" style={{marginBottom:'1rem'}}>
+                <button className="qty-btn" onClick={() => setQty(q => Math.max(1,q-1))}>−</button>
+                <span className="qty-num">{qty}</span>
+                <button className="qty-btn" onClick={() => setQty(q => q+1)}>+</button>
+              </div>
+              <div className="product-actions">
+                <button className="btn btn-pink btn-sm" onClick={handleAdd}>
+                  {added ? '✓ Added!' : '🛒 Add to Cart'}
+                </button>
+                <button className="btn btn-outline btn-sm" onClick={() => setPage('reveal')}>🎁 Pull Now</button>
+              </div>
+            </div>
+          </div>
+
+          {/* Info card */}
+          <div className="product-card" style={{background:'linear-gradient(135deg, #fce4ec, #f3e5fc)'}}>
+            <div className="product-img-wrap" style={{background:'linear-gradient(135deg,#f3e5fc,#e8f5e4)', height:200}}>
+              <div style={{fontSize:'4rem',textAlign:'center'}}>🎁✨🎀</div>
+            </div>
+            <div className="product-info">
+              <div className="product-name">What's Inside?</div>
+              <div className="product-desc">Every blindbox contains a mystery Fruitopia Girl figure. 3 characters to collect:</div>
+              {GIRLS.map(g => (
+                <div key={g.id} style={{display:'flex',alignItems:'center',gap:'10px',padding:'6px 0',fontWeight:700,fontSize:'0.9rem'}}>
+                  <img src={g.image} alt={g.name} style={{width:28,height:28,objectFit:'contain'}}/>
+                  <span>{g.name}</span>
+                </div>
+              ))}
+              <button className="btn btn-green btn-sm" style={{marginTop:'1rem',width:'100%'}} onClick={() => setPage('girls')}>
+                Meet the Girls →
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// REVEAL PAGE
+function RevealPage({ addToCart }) {
+  const [state, setState] = useState('idle'); // idle | spinning | revealed
+  const [pulledGirl, setPulledGirl] = useState(null);
+  const [confetti, setConfetti] = useState(false);
+  const [addedMsg, setAddedMsg] = useState(false);
+
+  function pullBox() {
+    if (state === 'spinning') return;
+    setState('spinning');
+    const weights = [0.33, 0.34, 0.33];
+    const rand = Math.random();
+    let girl;
+    if (rand < weights[0]) girl = GIRLS[0];
+    else if (rand < weights[0] + weights[1]) girl = GIRLS[1];
+    else girl = GIRLS[2];
+    setTimeout(() => {
+      setPulledGirl(girl);
+      setState('revealed');
+      setConfetti(true);
+      setTimeout(() => setConfetti(false), 3500);
+    }, 1500);
+  }
+
+  function pullAgain() {
+    setState('idle');
+    setPulledGirl(null);
+  }
+
+  function handleAddToCart() {
+    addToCart({ id: 'box', name: 'Fruitopia Girls Blindbox', price: PRODUCT_PRICE });
+    setAddedMsg(true);
+    setTimeout(() => setAddedMsg(false), 2000);
+  }
+
+  return (
+    <div className="page-enter">
+      <Confetti active={confetti}/>
+      <div className="reveal-stage">
+        <h2 style={{fontFamily:'Pacifico,cursive',fontSize:'2.2rem',color:'var(--hot-pink)',textAlign:'center',textShadow:'2px 2px 0 var(--light-pink)'}}>
+          Spin & Pull ✨
+        </h2>
+
+        {state !== 'revealed' && (
+          <>
+            <Box3D spinning={state === 'spinning'}/>
+            <p style={{fontWeight:700,color:'#aaa',fontSize:'0.95rem'}}>
+              {state === 'spinning' ? '🌀 Spinning...' : 'Ready to pull? Click below!'}
+            </p>
+            <button className="btn btn-pink" style={{fontSize:'1.15rem',padding:'16px 48px'}}
+              onClick={pullBox} disabled={state==='spinning'}>
+              {state==='spinning' ? '✨ Pulling...' : '🎁 PULL NOW'}
+            </button>
+          </>
+        )}
+
+        {state === 'revealed' && pulledGirl && (
+          <div className="girl-reveal">
+            <div className="girl-card" style={{background:`linear-gradient(135deg, ${pulledGirl.color}, ${pulledGirl.light})`, color: pulledGirl.id===2?'#1a4016':'white'}}>
+              <div style={{fontSize:'0.85rem',fontWeight:800,letterSpacing:'2px',textTransform:'uppercase',opacity:0.7,marginBottom:'0.5rem'}}>
+                You pulled...
+              </div>
+              <div className="girl-silhouette" style={{background:`${pulledGirl.color}22`, borderRadius:16, overflow:'hidden', width:120, height:140, margin:'0 auto 1.25rem', display:'flex', alignItems:'center', justifyContent:'center'}}>
+                <img src={pulledGirl.image} alt={pulledGirl.name} style={{width:'100%',height:'100%',objectFit:'contain',padding:'8px'}}/>
+              </div>
+              <div className="girl-name" style={{color: pulledGirl.id===2?'#1a4016':'white'}}>{pulledGirl.name}</div>
+              <div className="girl-nick" style={{color: pulledGirl.id===2?'#2d5228':'rgba(255,255,255,0.75)'}}>aka "{pulledGirl.nickname}"</div>
+              <div className="girl-traits">
+                {[pulledGirl.zodiac, pulledGirl.major, pulledGirl.heritage].map((t,i) => (
+                  <span key={i} className="trait-chip" style={{color: pulledGirl.id===2?'#1a4016':'white'}}>{t}</span>
+                ))}
+              </div>
+              <p style={{fontSize:'0.88rem',fontWeight:600,opacity:0.8,lineHeight:1.5}}>{pulledGirl.desc}</p>
+            </div>
+            <div style={{display:'flex',gap:'1rem',justifyContent:'center',marginTop:'1.5rem',flexWrap:'wrap'}}>
+              <button className="btn btn-pink" onClick={handleAddToCart}>
+                {addedMsg ? '✓ Added to Cart!' : '🛒 Add to Cart'}
+              </button>
+              <button className="btn btn-outline" onClick={pullAgain}>🔄 Pull Again</button>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// GIRLS PAGE
+function GirlsPage() {
+  return (
+    <div className="page-enter">
+      <div className="section">
+        <h2 className="section-title">Meet the Girls 💫</h2>
+        <p className="section-sub">Three girls, one university — all Fruitopia 🌸</p>
+        <div className="girls-grid">
+          {GIRLS.map(g => (
+            <div key={g.id} className="girl-profile" style={{background:`linear-gradient(160deg, ${g.color}, ${g.light})`}}>
+              <div className="girl-profile-top" style={{color: g.id===2?'#1a3a16':'white'}}>
+                <div style={{width:140,height:150,margin:'0 auto 1rem',display:'flex',alignItems:'center',justifyContent:'center'}}>
+                  <img src={g.image} alt={g.name} style={{maxWidth:'100%',maxHeight:'100%',objectFit:'contain',display:'block',margin:'0 auto'}}/>
+                </div>
+                <div className="girl-profile-name" style={{color: g.id===2?'#1a3a16':'white'}}>{g.name}</div>
+                <div className="girl-profile-nick">"{g.nickname}"</div>
+              </div>
+              <div className="girl-profile-body">
+                {[
+                  ['Age', `${g.age}`],
+                  ['Birthday', g.birthday],
+                  ['Zodiac', g.zodiac],
+                  ['Heritage', g.heritage],
+                  ['School', g.school],
+                  ['Major', g.major],
+                  ['Year', g.year],
+                  ['Likes', g.likes],
+                  ['Dislikes', g.dislikes],
+                  ['Personality', g.personality],
+                ].map(([label, val]) => (
+                  <div key={label} className="girl-stat">
+                    <span className="girl-stat-label">{label}</span>
+                    <span className="girl-stat-val" style={{maxWidth:'60%'}}>{val}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// CART PAGE
+function CartPage({ cart, setCart }) {
+  const [form, setForm] = useState({ name:'', email:'', address:'', city:'', zip:'' });
+  const [ordered, setOrdered] = useState(false);
+
+  const updateQty = (idx, delta) => {
+    setCart(c => {
+      const next = [...c];
+      next[idx] = { ...next[idx], qty: next[idx].qty + delta };
+      if (next[idx].qty <= 0) next.splice(idx, 1);
+      return next;
+    });
+  };
+  const remove = (idx) => setCart(c => c.filter((_, i) => i !== idx));
+  const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
+  const shipping = subtotal > 0 ? 4.99 : 0;
+  const total = subtotal + shipping;
+
+  function handleOrder(e) {
+    e.preventDefault();
+    setOrdered(true);
+    setCart([]);
+  }
+
+  if (ordered) return (
+    <div className="page-enter">
+      <div className="success-screen">
+        <div className="success-icon">🎉</div>
+        <h2 style={{fontFamily:'Pacifico,cursive',fontSize:'2.2rem',color:'var(--hot-pink)'}}>Order Placed!</h2>
+        <p style={{fontWeight:700,color:'#888',fontSize:'1rem',maxWidth:400,lineHeight:1.6}}>
+          Thank you so much! Your Fruitopia Girls blindbox is on its way. We hope you get the one you want! ✨
+        </p>
+        <button className="btn btn-pink" onClick={() => setOrdered(false)}>Continue Shopping</button>
+      </div>
+    </div>
+  );
+
+  if (cart.length === 0) return (
+    <div className="page-enter">
+      <div className="section">
+        <div className="empty-cart">
+          <div className="empty-cart-emoji">🛒</div>
+          <h2 style={{fontFamily:'Pacifico,cursive',color:'var(--hot-pink)',marginBottom:'0.5rem'}}>Cart is Empty!</h2>
+          <p style={{color:'#aaa',fontWeight:700,marginBottom:'2rem'}}>Add some blindboxes to get started!</p>
+        </div>
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="page-enter">
+      <div className="section">
+        <h2 className="section-title">Your Cart 🛒</h2>
+        <p className="section-sub">{cart.reduce((s,i)=>s+i.qty,0)} item(s) in your cart</p>
+        <div className="cart-layout">
+          <div>
+            <div className="cart-table">
+              <div className="cart-header">
+                <span>Item</span><span>Price</span><span>Qty</span><span>Remove</span>
+              </div>
+              {cart.map((item, idx) => (
+                <div key={idx} className="cart-row">
+                  <div>
+                    <div className="cart-item-name">{item.name}</div>
+                    <div className="cart-item-sub">Series 1 Blindbox</div>
+                  </div>
+                  <div style={{fontWeight:800}}>${item.price.toFixed(2)}</div>
+                  <div className="qty-ctrl">
+                    <button className="qty-btn" onClick={() => updateQty(idx,-1)}>−</button>
+                    <span className="qty-num">{item.qty}</span>
+                    <button className="qty-btn" onClick={() => updateQty(idx,1)}>+</button>
+                  </div>
+                  <button className="cart-remove" onClick={() => remove(idx)}>✕</button>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <div className="order-summary">
+              <div className="order-title">Order Summary</div>
+              <div className="order-line"><span>Subtotal</span><span>${subtotal.toFixed(2)}</span></div>
+              <div className="order-line"><span>Shipping</span><span>${shipping.toFixed(2)}</span></div>
+              <div className="order-total"><span>Total</span><span>${total.toFixed(2)}</span></div>
+
+              <form onSubmit={handleOrder} style={{marginTop:'1.5rem'}}>
+                <div style={{fontWeight:900,fontSize:'1rem',marginBottom:'1rem',color:'var(--hot-pink)'}}>Shipping Info</div>
+                {[['name','Full Name','text'],['email','Email','email'],['address','Address','text'],['city','City','text'],['zip','ZIP Code','text']].map(([field,label,type]) => (
+                  <div key={field} className="input-group">
+                    <label className="input-label">{label}</label>
+                    <input className="input-field" type={type} required value={form[field]}
+                      onChange={e => setForm(f=>({...f,[field]:e.target.value}))}/>
+                  </div>
+                ))}
+                <button type="submit" className="btn btn-pink" style={{width:'100%',marginTop:'0.5rem',fontSize:'1rem'}}>
+                  Place Order ✨
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// APP
+function App() {
+  const [page, setPage] = useState(() => localStorage.getItem('fg_page') || 'home');
+  const [cart, setCart] = useState([]);
+
+  useEffect(() => { localStorage.setItem('fg_page', page); }, [page]);
+
+  const addToCart = useCallback((item) => {
+    setCart(c => {
+      const existing = c.findIndex(i => i.id === item.id);
+      if (existing >= 0) {
+        const next = [...c];
+        next[existing] = { ...next[existing], qty: next[existing].qty + 1 };
+        return next;
+      }
+      return [...c, { ...item, qty: 1 }];
+    });
+  }, []);
+
+  const cartCount = cart.reduce((s,i) => s + i.qty, 0);
+
+  const pages = { home: <HomePage setPage={setPage}/>, shop: <ShopPage addToCart={addToCart} setPage={setPage}/>, reveal: <RevealPage addToCart={addToCart}/>, girls: <GirlsPage/>, cart: <CartPage cart={cart} setCart={setCart}/> };
+
+  return (
+    <>
+      <Nav page={page} setPage={setPage} cartCount={cartCount}/>
+      {pages[page] || pages['home']}
+      <footer>
+        ✦ Fruitopia Girls
+        <span>Series 1 — FAU Blind Box Collection ✦ All Rights Reserved</span>
+      </footer>
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+<template id="__bundler_thumbnail" data-bg-color="#f3839f">
+  <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+    <rect width="400" height="300" fill="#f3839f"/>
+    <text x="200" y="140" text-anchor="middle" font-family="serif" font-size="48" fill="white" font-weight="bold">✦</text>
+    <text x="200" y="190" text-anchor="middle" font-family="serif" font-size="28" fill="white">Fruitopia Girls</text>
+  </svg>
+</template>
+</body>
+</html>
